@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<root>
+    <name>guy collection</name>
+    <good_guy>
+        <name>Luke Skywalker</name>
+        <weapon>Lightsaber</weapon>
+    </good_guy>
+    <good_guy>
+        <name>Gandalf</name>
+        <weapon>Staff</weapon>
+    </good_guy>
+    <bad_guy>
+        <name>Saruman</name>
+        <weapon>Staff</weapon>
+    </bad_guy>
+    <bad_guy>
+        <name>Sauron</name>
+        <weapon>Ring</weapon>
+    </bad_guy>
+</root>

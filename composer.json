@@ -1,0 +1,40 @@
+{
+  "name": "vaclavvanik/dom-to-array",
+  "description": "Load DOM document safety",
+  "license": "MIT",
+  "type": "library",
+  "homepage": "https://github.com/vaclavvanik/dom-to-array",
+  "keywords": [
+    "array",
+    "dom",
+    "xml"
+  ],
+  "authors": [
+    {
+      "name": "Václav Vaník",
+      "email": "vaclav.vanik@gmail.com"
+    }
+  ],
+  "config": {
+    "sort-packages": true
+  },
+  "require": {
+    "php": "^7.3 || ^8.0",
+    "ext-dom": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "VaclavVanik\\DomToArray\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "VaclavVanikTest\\DomToArray\\": "test/unit"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
+}
