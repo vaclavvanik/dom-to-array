@@ -9,6 +9,7 @@ use DOMDocument;
 use DOMElement;
 use DOMText;
 
+use function array_merge;
 use function count;
 use function trim;
 
@@ -17,7 +18,7 @@ class DomToArray
     /** @var DOMDocument */
     private $doc;
 
-    private const KEY_ATTRIBUTES = '@attributes';
+    private const ATTRIBUTE_PREFIX = '@';
 
     private const KEY_VALUE = '@value';
 
@@ -32,12 +33,22 @@ class DomToArray
         return (new self($doc))->convert();
     }
 
-    /** @return array<mixed> */
+    /**
+     * @return array<mixed>
+     *
+     * @throws Exception\DomEmpty if given DOMDocument is empty.
+     */
     private function convert(): array
     {
-        return [
-            $this->doc->documentElement->nodeName => $this->convertDomElement($this->doc->documentElement),
-        ];
+        $element = $this->doc->documentElement;
+
+        if ($element === null) {
+            throw Exception\DomEmpty::fromDom($this->doc);
+        }
+
+        $result[$element->nodeName] = $this->convertDomElement($element);
+
+        return $this->mergeAttributes($result, $this->convertDomAttributes($element));
     }
 
     /** @return array<mixed> */
@@ -47,10 +58,10 @@ class DomToArray
             $attributes = [];
 
             foreach ($element->attributes as $attr) {
-                $attributes[$attr->name] = $attr->value;
+                $attributes[$element->nodeName . self::ATTRIBUTE_PREFIX . $attr->name] = $attr->value;
             }
 
-            return [self::KEY_ATTRIBUTES => $attributes];
+            return $attributes;
         }
 
         return [];
@@ -76,10 +87,25 @@ class DomToArray
         return $names;
     }
 
-    /** @return array<mixed>|string */
-    private function convertDomElement(DOMElement $element)
+    /**
+     * @param array<mixed> $result
+     * @param array<mixed> $attributes
+     *
+     * @return array<mixed>
+     */
+    private function mergeAttributes(array $result, array $attributes): array
     {
-        $result = $this->convertDomAttributes($element);
+        if ($attributes) {
+            return array_merge($result, $attributes);
+        }
+
+        return $result;
+    }
+
+    /** @return array<mixed>|string */
+    private function convertDomElement(DOMElement $element) /*: string|array*/
+    {
+        $result = [];
 
         $childNames = $this->childNamesCount($element);
 
@@ -107,11 +133,15 @@ class DomToArray
                     $result[$childNode->nodeName] = [];
                 }
 
-                $result[$childNode->nodeName][] = $this->convertDomElement($childNode);
+                $childResult = $this->convertDomElement($childNode);
+                $childResult = $this->mergeAttributes($childResult, $this->convertDomAttributes($childNode));
+
+                $result[$childNode->nodeName][] = $childResult;
                 continue;
             }
 
             $result[$childNode->nodeName] = $this->convertDomElement($childNode);
+            $result = $this->mergeAttributes($result, $this->convertDomAttributes($childNode));
         }
 
         if (isset($result[self::KEY_VALUE]) && trim($result[self::KEY_VALUE]) !== '') {

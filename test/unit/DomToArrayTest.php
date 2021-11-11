@@ -7,15 +7,16 @@ namespace VaclavVanikTest\DomToArray;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use VaclavVanik\DomToArray\DomToArray;
+use VaclavVanik\DomToArray\Exception\DomEmpty;
 
 final class DomToArrayTest extends TestCase
 {
-    public function testConstructor(): void
+    public function testConvert(): void
     {
         $doc = new DOMDocument();
-        $doc->loadXML('<root/>');
+        $doc->loadXML('<root attr="val"/>');
 
-        $this->assertSame(['root' => ''], DomToArray::toArray($doc));
+        $this->assertSame(['root' => '', 'root@attr' => 'val'], DomToArray::toArray($doc));
     }
 
     public function testConvertArray(): void
@@ -55,10 +56,21 @@ final class DomToArrayTest extends TestCase
     {
         $attributes = [
             'root' => [
-                'bad_guy' => [
-                    '@attributes' => ['lang' => 'Black Speech'],
-                    'name' => 'Sauron',
-                    'weapon' => 'Evil Eye',
+                'collection' => '',
+                'collection@type' => 'any',
+                'author' => 'Tolkien',
+                'author@lang' => 'English',
+                'guy' => [
+                    [
+                        'name' => 'Sauron',
+                        'weapon' => 'Evil Eye',
+                        'guy@lang' => 'Black Speech',
+                    ],
+                    [
+                        'name' => 'Gandalf',
+                        'weapon' => 'Staff',
+                        'guy@lang' => 'Elvish',
+                    ],
                 ],
             ],
         ];
@@ -84,20 +96,12 @@ final class DomToArrayTest extends TestCase
         $this->assertSame($cdata, DomToArray::toArray($doc));
     }
 
-    public function testSimple(): void
+    public function testEmptyDomDocument(): void
     {
-        $simple = [
-            'root' => [
-                'good_guy' => [
-                    'name' => 'Luke Skywalker',
-                    'weapon' => 'Lightsaber',
-                ],
-            ],
-        ];
+        $this->expectException(DomEmpty::class);
+        $this->expectErrorMessage('Cannot convert empty ' . DOMDocument::class);
 
-        $doc = $this->domFromFile(__DIR__ . '/_files/simple.xml');
-
-        $this->assertSame($simple, DomToArray::toArray($doc));
+        DomToArray::toArray(new DOMDocument());
     }
 
     private function domFromFile(string $file): DOMDocument

@@ -1,7 +1,13 @@
 <?xml version="1.0"?>
 <root>
-    <bad_guy lang="Black Speech">
+    <collection type="any"/>
+    <author lang="English">Tolkien</author>
+    <guy lang="Black Speech">
         <name>Sauron</name>
         <weapon>Evil Eye</weapon>
-    </bad_guy>
+    </guy>
+    <guy lang="Elvish">
+        <name>Gandalf</name>
+        <weapon>Staff</weapon>
+    </guy>
 </root>

@@ -26,7 +26,9 @@ TBD
 
 ## Exceptions
 
-TBD
+convert throws:
+
+- [Exception\DomEmpty](src/Exception/DomEmpty.php) if given DOMDocument is empty.
 
 ## Run check - coding standards and php-unit
 
