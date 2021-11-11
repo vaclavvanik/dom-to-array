@@ -33,17 +33,13 @@ class DomToArray
         return (new self($doc))->convert();
     }
 
-    /**
-     * @return array<mixed>
-     *
-     * @throws Exception\DomEmpty if given DOMDocument is empty.
-     */
+    /** @return array<mixed> */
     private function convert(): array
     {
         $element = $this->doc->documentElement;
 
         if ($element === null) {
-            throw Exception\DomEmpty::fromDom($this->doc);
+            return [];
         }
 
         $result[$element->nodeName] = $this->convertDomElement($element);
@@ -87,6 +83,12 @@ class DomToArray
         return $names;
     }
 
+    /** @param array<string,int> $childNamesCount */
+    private function isArrayElement(string $name, array $childNamesCount): bool
+    {
+        return $childNamesCount[$name] > 1;
+    }
+
     /**
      * @param array<mixed> $result
      * @param array<mixed> $attributes
@@ -95,7 +97,7 @@ class DomToArray
      */
     private function mergeAttributes(array $result, array $attributes): array
     {
-        if ($attributes) {
+        if (count($attributes) > 0) {
             return array_merge($result, $attributes);
         }
 
@@ -107,11 +109,7 @@ class DomToArray
     {
         $result = [];
 
-        $childNames = $this->childNamesCount($element);
-
-        $isArrayElement = static function (string $name) use ($childNames): bool {
-            return $childNames[$name] > 1;
-        };
+        $childNamesCount = $this->childNamesCount($element);
 
         foreach ($element->childNodes as $childNode) {
             if ($childNode instanceof DOMCdataSection) {
@@ -128,7 +126,7 @@ class DomToArray
                 continue;
             }
 
-            if ($isArrayElement($childNode->nodeName)) {
+            if ($this->isArrayElement($childNode->nodeName, $childNamesCount)) {
                 if (! isset($result[$childNode->nodeName])) {
                     $result[$childNode->nodeName] = [];
                 }

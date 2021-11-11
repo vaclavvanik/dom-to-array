@@ -7,7 +7,6 @@ namespace VaclavVanikTest\DomToArray;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use VaclavVanik\DomToArray\DomToArray;
-use VaclavVanik\DomToArray\Exception\DomEmpty;
 
 final class DomToArrayTest extends TestCase
 {
@@ -17,6 +16,13 @@ final class DomToArrayTest extends TestCase
         $doc->loadXML('<root attr="val"/>');
 
         $this->assertSame(['root' => '', 'root@attr' => 'val'], DomToArray::toArray($doc));
+    }
+
+    public function testConvertEmptyDomDocument(): void
+    {
+        $doc = new DOMDocument();
+
+        $this->assertSame([], DomToArray::toArray($doc));
     }
 
     public function testConvertArray(): void
@@ -94,14 +100,6 @@ final class DomToArrayTest extends TestCase
         $doc = $this->domFromFile(__DIR__ . '/_files/cdata.xml');
 
         $this->assertSame($cdata, DomToArray::toArray($doc));
-    }
-
-    public function testEmptyDomDocument(): void
-    {
-        $this->expectException(DomEmpty::class);
-        $this->expectErrorMessage('Cannot convert empty ' . DOMDocument::class);
-
-        DomToArray::toArray(new DOMDocument());
     }
 
     private function domFromFile(string $file): DOMDocument
