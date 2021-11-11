@@ -4,6 +4,10 @@ This package provides an easy way to convert [DOMDocument](https://www.php.net/m
 
 `DomToArray` supports attributes, cdata and array like elements.
 
+Main usage is to convert any XML API response to array. DomToArray consumes good old PHP DOMDocument object.
+XML API responses are strings which could be flawlessly loaded to DOMDocument with
+[vaclavvanik/dom-loader](https://github.com/vaclavvanik/dom-loader).
+
 ## Install
 
 You can install this package via composer.
