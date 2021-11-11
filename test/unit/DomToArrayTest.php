@@ -12,10 +12,15 @@ final class DomToArrayTest extends TestCase
 {
     public function testConvert(): void
     {
+        $result = [
+            'root' => '',
+            'root@attr' => 'val',
+        ];
+
         $doc = new DOMDocument();
         $doc->loadXML('<root attr="val"/>');
 
-        $this->assertSame(['root' => '', 'root@attr' => 'val'], DomToArray::toArray($doc));
+        $this->assertSame($result, DomToArray::toArray($doc));
     }
 
     public function testConvertEmptyDomDocument(): void
@@ -27,7 +32,7 @@ final class DomToArrayTest extends TestCase
 
     public function testConvertArray(): void
     {
-        $array = [
+        $result = [
             'root' => [
                 'name' => 'guy collection',
                 'good_guy' => [
@@ -55,12 +60,12 @@ final class DomToArrayTest extends TestCase
 
         $doc = $this->domFromFile(__DIR__ . '/_files/array.xml');
 
-        $this->assertSame($array, DomToArray::toArray($doc));
+        $this->assertSame($result, DomToArray::toArray($doc));
     }
 
     public function testConvertAttributes(): void
     {
-        $attributes = [
+        $result = [
             'root' => [
                 'collection' => '',
                 'collection@type' => 'any',
@@ -79,16 +84,17 @@ final class DomToArrayTest extends TestCase
                     ],
                 ],
             ],
+            'root@attr' => 'val',
         ];
 
         $doc = $this->domFromFile(__DIR__ . '/_files/attributes.xml');
 
-        $this->assertSame($attributes, DomToArray::toArray($doc));
+        $this->assertSame($result, DomToArray::toArray($doc));
     }
 
     public function testConvertCdata(): void
     {
-        $cdata = [
+        $result = [
             'root' => [
                 'good_guy' => [
                     'name' => '<h1>Gandalf</h1>',
@@ -99,7 +105,7 @@ final class DomToArrayTest extends TestCase
 
         $doc = $this->domFromFile(__DIR__ . '/_files/cdata.xml');
 
-        $this->assertSame($cdata, DomToArray::toArray($doc));
+        $this->assertSame($result, DomToArray::toArray($doc));
     }
 
     private function domFromFile(string $file): DOMDocument

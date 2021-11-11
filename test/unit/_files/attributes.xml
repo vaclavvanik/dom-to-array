@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<root>
+<root attr="val">
     <collection type="any"/>
     <author lang="English">Tolkien</author>
     <guy lang="Black Speech">
