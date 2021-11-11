@@ -1,4 +1,4 @@
-# Dom-to-array
+# DomToArray
 
 This package provides an easy way to convert [DOMDocument](https://www.php.net/manual/en/class.domdocument.php) into array.
 
@@ -133,6 +133,8 @@ $result = [
 ```
 
 ### Cdata
+
+Cdata are convert same as element text content.
 
 ```xml
 <root>
