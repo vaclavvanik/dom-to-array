@@ -1,6 +1,6 @@
 # DomToArray
 
-This package provides an easy way to convert [DOMDocument](https://www.php.net/manual/en/class.domdocument.php) into array.
+This package provides an easy way to convert [DOMDocument](https://www.php.net/manual/en/class.domdocument.php) to PHP array.
 
 `DomToArray` supports attributes, cdata and array like elements.
 

@@ -1,6 +1,6 @@
 {
   "name": "vaclavvanik/dom-to-array",
-  "description": "Load DOM document safety",
+  "description": "An easy way to convert DOM Document to PHP array",
   "license": "MIT",
   "type": "library",
   "homepage": "https://github.com/vaclavvanik/dom-to-array",
