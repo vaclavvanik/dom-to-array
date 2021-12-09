@@ -132,6 +132,11 @@ class DomToArray
                 }
 
                 $childResult = $this->convertDomElement($childNode);
+
+                if ($childResult === '') {
+                    $childResult = [];
+                }
+
                 $childResult = $this->mergeAttributes($childResult, $this->convertDomAttributes($childNode));
 
                 $result[$childNode->nodeName][] = $childResult;

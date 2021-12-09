@@ -67,8 +67,12 @@ final class DomToArrayTest extends TestCase
     {
         $result = [
             'root' => [
-                'collection' => '',
-                'collection@type' => 'any',
+                'single' => '',
+                'single@type' => 'any',
+                'collection' => [
+                    ['collection@type' => 'any1'],
+                    ['collection@type' => 'any2'],
+                ],
                 'author' => 'Tolkien',
                 'author@lang' => 'English',
                 'guy' => [

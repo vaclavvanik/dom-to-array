@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <root attr="val">
-    <collection type="any"/>
+    <single type="any"/>
+    <collection type="any1"/>
+    <collection type="any2"/>
     <author lang="English">Tolkien</author>
     <guy lang="Black Speech">
         <name>Sauron</name>
