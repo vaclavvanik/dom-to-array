@@ -97,7 +97,9 @@ Element attributes create key => value like `element_name@attribute_name` => `at
 
 ```xml
 <root attr="val">
-    <collection type="any"/>
+    <single type="any"/>
+    <collection type="any1"/>
+    <collection type="any2"/>
     <author lang="English">Tolkien</author>
     <guy lang="Black Speech">
         <name>Sauron</name>
@@ -115,8 +117,12 @@ This will result in:
 ```php
 $result = [
     'root' => [
-        'collection' => '',
-        'collection@type' => 'any',
+        'single' => '',
+        'single@type' => 'any',
+        'collection' => [
+            ['collection@type' => 'any1'],
+            ['collection@type' => 'any2'],
+        ],
         'author' => 'Tolkien',
         'author@lang' => 'English',
         'guy' => [
