@@ -143,8 +143,14 @@ $result = [
             ],
         ],
         'bad_guy' => [
-            ['name' => 'Saruman', 'name@weapon' => 'Staff'],
-            ['name' => 'Sauron', 'name@weapon' => 'Ring'],
+            [
+                'name' => 'Saruman',
+                 'name@weapon' => 'Staff',
+            ],
+            [
+                'name' => 'Sauron',
+                'name@weapon' => 'Ring',
+            ],
         ],
         'bad_guy@lang' => 'Unknown',
     ],
