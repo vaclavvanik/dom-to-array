@@ -11,6 +11,7 @@ use DOMText;
 
 use function array_merge;
 use function count;
+use function is_array;
 use function trim;
 
 class DomToArray
@@ -137,7 +138,9 @@ class DomToArray
                     $childResult = [];
                 }
 
-                $childResult = $this->mergeAttributes($childResult, $this->convertDomAttributes($childNode));
+                if (is_array($childResult)) {
+                    $childResult = $this->mergeAttributes($childResult, $this->convertDomAttributes($childNode));
+                }
 
                 $result[$childNode->nodeName][] = $childResult;
                 continue;

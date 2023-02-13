@@ -17,4 +17,8 @@
         <name>Sauron</name>
         <weapon>Ring</weapon>
     </bad_guy>
+    <unknown>
+        <name>King of the Dead</name>
+        <name>Ghân-buri-Ghân</name>
+    </unknown>
 </root>

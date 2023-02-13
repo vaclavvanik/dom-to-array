@@ -55,6 +55,12 @@ final class DomToArrayTest extends TestCase
                         'weapon' => 'Ring',
                     ],
                 ],
+                'unknown' => [
+                    'name' => [
+                        'King of the Dead',
+                        'Ghân-buri-Ghân',
+                    ],
+                ],
             ],
         ];
 
