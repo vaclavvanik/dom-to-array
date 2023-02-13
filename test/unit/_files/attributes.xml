@@ -5,11 +5,15 @@
     <collection type="any2"/>
     <author lang="English">Tolkien</author>
     <guy lang="Black Speech">
-        <name>Sauron</name>
-        <weapon>Evil Eye</weapon>
+        <name weapon="Ring">Sauron</name>
+        <weapon>Ring</weapon>
     </guy>
     <guy lang="Elvish">
-        <name>Gandalf</name>
+        <name weapon="Staff">Gandalf</name>
         <weapon>Staff</weapon>
     </guy>
+    <bad_guy lang="Unknown">
+        <name weapon="Staff">Saruman</name>
+        <name weapon="Ring">Sauron</name>
+    </bad_guy>
 </root>

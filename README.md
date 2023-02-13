@@ -37,7 +37,7 @@ $result = DomToArray::toArray($doc);
 
 ### Array elements
 
-Multiple elements with same name will create multi-dimensional array.
+Multiple elements with same name will create multidimensional array.
 
 ```xml
 <root>
@@ -102,13 +102,17 @@ Element attributes create key => value like `element_name@attribute_name` => `at
     <collection type="any2"/>
     <author lang="English">Tolkien</author>
     <guy lang="Black Speech">
-        <name>Sauron</name>
-        <weapon>Evil Eye</weapon>
+        <name weapon="Ring">Sauron</name>
+        <weapon>Ring</weapon>
     </guy>
     <guy lang="Elvish">
-        <name>Gandalf</name>
+        <name weapon="Staff">Gandalf</name>
         <weapon>Staff</weapon>
     </guy>
+    <bad_guy lang="Unknown">
+        <name weapon="Staff">Saruman</name>
+        <name weapon="Ring">Sauron</name>
+    </bad_guy>
 </root>
 ```
 
@@ -128,15 +132,21 @@ $result = [
         'guy' => [
             [
                 'name' => 'Sauron',
-                'weapon' => 'Evil Eye',
+                'name@weapon' => 'Ring',
+                'weapon' => 'Ring',
                 'guy@lang' => 'Black Speech',
             ],
-            [
                 'name' => 'Gandalf',
+                'name@weapon' => 'Staff',
                 'weapon' => 'Staff',
                 'guy@lang' => 'Elvish',
             ],
         ],
+        'bad_guy' => [
+            ['name' => 'Saruman', 'name@weapon' => 'Staff'],
+            ['name' => 'Sauron', 'name@weapon' => 'Ring'],
+        ],
+        'bad_guy@lang' => 'Unknown',
     ],
     'root@attr' => 'val',
 ];

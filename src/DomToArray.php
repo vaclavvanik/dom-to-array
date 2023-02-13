@@ -12,6 +12,7 @@ use DOMText;
 use function array_merge;
 use function count;
 use function is_array;
+use function is_string;
 use function trim;
 
 class DomToArray
@@ -128,14 +129,21 @@ class DomToArray
             }
 
             if ($this->isArrayElement($childNode->nodeName, $childNamesCount)) {
-                if (! isset($result[$childNode->nodeName])) {
-                    $result[$childNode->nodeName] = [];
-                }
-
                 $childResult = $this->convertDomElement($childNode);
 
                 if ($childResult === '') {
                     $childResult = [];
+                }
+
+                if (is_string($childResult) && $childNode->hasAttributes()) {
+                    $childResult = [$childNode->nodeName => $childResult];
+
+                    $result[] = $this->mergeAttributes($childResult, $this->convertDomAttributes($childNode));
+                    continue;
+                }
+
+                if (! isset($result[$childNode->nodeName])) {
+                    $result[$childNode->nodeName] = [];
                 }
 
                 if (is_array($childResult)) {

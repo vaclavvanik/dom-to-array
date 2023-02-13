@@ -84,15 +84,28 @@ final class DomToArrayTest extends TestCase
                 'guy' => [
                     [
                         'name' => 'Sauron',
-                        'weapon' => 'Evil Eye',
+                        'name@weapon' => 'Ring',
+                        'weapon' => 'Ring',
                         'guy@lang' => 'Black Speech',
                     ],
                     [
                         'name' => 'Gandalf',
+                        'name@weapon' => 'Staff',
                         'weapon' => 'Staff',
                         'guy@lang' => 'Elvish',
                     ],
                 ],
+                'bad_guy' => [
+                    [
+                        'name' => 'Saruman',
+                        'name@weapon' => 'Staff',
+                    ],
+                    [
+                        'name' => 'Sauron',
+                        'name@weapon' => 'Ring',
+                    ],
+                ],
+                'bad_guy@lang' => 'Unknown',
             ],
             'root@attr' => 'val',
         ];
