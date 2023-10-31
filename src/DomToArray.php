@@ -20,19 +20,38 @@ class DomToArray
     /** @var DOMDocument */
     private $doc;
 
+    /** @var DomOptions|null */
+    private $options;
+
     private const ATTRIBUTE_PREFIX = '@';
 
     private const KEY_VALUE = '@value';
 
-    private function __construct(DOMDocument $doc)
+    private function __construct(DOMDocument $doc, ?DomOptions $options)
     {
         $this->doc = $doc;
+        $this->options = $options;
     }
 
     /** @return array<mixed> */
     public static function toArray(DOMDocument $doc): array
     {
-        return (new self($doc))->convert();
+        return (new self($doc, null))->convert();
+    }
+
+    /** @return array<mixed> */
+    public static function toArrayWithOptions(DOMDocument $doc, DomOptions $options): array
+    {
+        return (new self($doc, $options))->convert();
+    }
+
+    private function skipAttributes(): bool
+    {
+        if ($this->options) {
+            return $this->options->getSkipAttributes();
+        }
+
+        return false;
     }
 
     /** @return array<mixed> */
@@ -52,6 +71,10 @@ class DomToArray
     /** @return array<mixed> */
     private function convertDomAttributes(DOMElement $element): array
     {
+        if ($this->skipAttributes() === true) {
+            return [];
+        }
+
         if ($element->hasAttributes()) {
             $attributes = [];
 
@@ -124,10 +147,6 @@ class DomToArray
                 continue;
             }
 
-            if (! ($childNode instanceof DOMElement)) {
-                continue;
-            }
-
             if ($this->isArrayElement($childNode->nodeName, $childNamesCount)) {
                 $childResult = $this->convertDomElement($childNode);
 
@@ -135,7 +154,7 @@ class DomToArray
                     $childResult = [];
                 }
 
-                if (is_string($childResult) && $childNode->hasAttributes()) {
+                if (is_string($childResult) && $childNode->hasAttributes() && $this->skipAttributes() === false) {
                     $childResult = [$childNode->nodeName => $childResult];
 
                     $result[] = $this->mergeAttributes($childResult, $this->convertDomAttributes($childNode));
@@ -150,7 +169,7 @@ class DomToArray
                     $childResult = $this->mergeAttributes($childResult, $this->convertDomAttributes($childNode));
                 }
 
-                $result[$childNode->nodeName][] = $childResult;
+                $result[$childNode->nodeName][] = $childResult === [] ? '' : $childResult;
                 continue;
             }
 

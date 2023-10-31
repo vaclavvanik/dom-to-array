@@ -184,6 +184,67 @@ $result = [
 ];
 ```
 
+## DomOptions
+
+Sometimes it is useful to work only with elements (attributes are not needed).
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use DOMDocument;
+use VaclavVanik\DomToArray;
+
+$domOptions = DomOptions::fromArray([DomOptions::SKIP_ATTRIBUTES => true]);
+$result = DomToArray::toArrayWithOptions($doc, $domOptions);
+```
+
+```xml
+<root attr="val">
+    <single type="any"/>
+    <collection type="any1"/>
+    <collection type="any2"/>
+    <author lang="English">Tolkien</author>
+    <guy lang="Black Speech">
+        <name weapon="Ring">Sauron</name>
+        <weapon>Ring</weapon>
+    </guy>
+    <guy lang="Elvish">
+        <name weapon="Staff">Gandalf</name>
+        <weapon>Staff</weapon>
+    </guy>
+    <bad_guy lang="Unknown">
+        <name weapon="Staff">Saruman</name>
+        <name weapon="Ring">Sauron</name>
+    </bad_guy>
+</root>
+```
+This will result in:
+
+```php
+$result = [
+    'root' => [
+        'single' => '',
+        'collection' => ['', ''],
+        'author' => 'Tolkien',
+        'guy' => [
+            [
+                'name' => 'Sauron',
+                'weapon' => 'Ring',
+            ],
+            [
+                'name' => 'Gandalf',
+                'weapon' => 'Staff',
+            ],
+        ],
+        'bad_guy' => [
+            'name' => ['Saruman', 'Sauron'],
+        ],
+    ],
+];
+```
+
 ## Run check - coding standards and php-unit
 
 Install dependencies:

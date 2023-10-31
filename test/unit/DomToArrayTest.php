@@ -6,6 +6,7 @@ namespace VaclavVanikTest\DomToArray;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use VaclavVanik\DomToArray\DomOptions;
 use VaclavVanik\DomToArray\DomToArray;
 
 final class DomToArrayTest extends TestCase
@@ -21,6 +22,16 @@ final class DomToArrayTest extends TestCase
         $doc->loadXML('<root attr="val"/>');
 
         $this->assertSame($result, DomToArray::toArray($doc));
+    }
+
+    public function testConvertSkipAttributes(): void
+    {
+        $result = ['root' => ''];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root attr="val"/>');
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionSkipAttributes()));
     }
 
     public function testConvertEmptyDomDocument(): void
@@ -64,7 +75,7 @@ final class DomToArrayTest extends TestCase
             ],
         ];
 
-        $doc = $this->domFromFile(__DIR__ . '/_files/array.xml');
+        $doc = self::domFromFile(__DIR__ . '/_files/array.xml');
 
         $this->assertSame($result, DomToArray::toArray($doc));
     }
@@ -110,9 +121,37 @@ final class DomToArrayTest extends TestCase
             'root@attr' => 'val',
         ];
 
-        $doc = $this->domFromFile(__DIR__ . '/_files/attributes.xml');
+        $doc = self::domFromFile(__DIR__ . '/_files/attributes.xml');
 
         $this->assertSame($result, DomToArray::toArray($doc));
+    }
+
+    public function testConvertAttributesSkipAttributes(): void
+    {
+        $result = [
+            'root' => [
+                'single' => '',
+                'collection' => ['', ''],
+                'author' => 'Tolkien',
+                'guy' => [
+                    [
+                        'name' => 'Sauron',
+                        'weapon' => 'Ring',
+                    ],
+                    [
+                        'name' => 'Gandalf',
+                        'weapon' => 'Staff',
+                    ],
+                ],
+                'bad_guy' => [
+                    'name' => ['Saruman', 'Sauron'],
+                ],
+            ],
+        ];
+
+        $doc = self::domFromFile(__DIR__ . '/_files/attributes.xml');
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionSkipAttributes()));
     }
 
     public function testConvertCdata(): void
@@ -126,16 +165,21 @@ final class DomToArrayTest extends TestCase
             ],
         ];
 
-        $doc = $this->domFromFile(__DIR__ . '/_files/cdata.xml');
+        $doc = self::domFromFile(__DIR__ . '/_files/cdata.xml');
 
         $this->assertSame($result, DomToArray::toArray($doc));
     }
 
-    private function domFromFile(string $file): DOMDocument
+    private static function domFromFile(string $file): DOMDocument
     {
         $doc = new DOMDocument();
         $doc->load($file);
 
         return $doc;
+    }
+
+    private static function domOptionSkipAttributes(): DomOptions
+    {
+        return DomOptions::fromArray([DomOptions::SKIP_ATTRIBUTES => true]);
     }
 }
