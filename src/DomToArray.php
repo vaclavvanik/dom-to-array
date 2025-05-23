@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace VaclavVanik\DomToArray;
 
 use DOMCdataSection;
+use DOMComment;
 use DOMDocument;
 use DOMElement;
 use DOMText;
