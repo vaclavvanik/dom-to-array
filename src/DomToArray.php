@@ -147,6 +147,10 @@ class DomToArray
                 continue;
             }
 
+            if ($childNode instanceof DOMComment) {
+                continue;
+            }
+
             if ($this->isArrayElement($childNode->nodeName, $childNamesCount)) {
                 $childResult = $this->convertDomElement($childNode);
 
