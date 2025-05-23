@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace VaclavVanik\DomToArray;
 
 use DOMCdataSection;
+use DOMComment;
 use DOMDocument;
 use DOMElement;
 use DOMText;
@@ -137,6 +138,10 @@ class DomToArray
         $childNamesCount = $this->childNamesCount($element);
 
         foreach ($element->childNodes as $childNode) {
+            if ($childNode instanceof DOMComment) {
+                continue;
+            }
+
             if ($childNode instanceof DOMCdataSection) {
                 $result[self::KEY_VALUE] = $childNode->data;
                 continue;
