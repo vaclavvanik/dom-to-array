@@ -40,6 +40,34 @@ $result = DomToArray::toArray($doc);
 // $result = ['root' => ''];
 ```
 
+### XML API responses
+
+`DomToArray` is meant mainly for turning XML responses from various APIs into a plain array to
+work with. A typical setup drops the attributes and the response wrapper element:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use VaclavVanik\DomLoader\DomLoader;
+use VaclavVanik\DomToArray\DomOptions;
+use VaclavVanik\DomToArray\DomToArray;
+
+// vaclavvanik/dom-loader turns a response string into a DOMDocument or a typed exception
+$doc = DomLoader::loadString($apiResponseBody);
+
+$domOptions = DomOptions::fromArray([
+    DomOptions::SKIP_ATTRIBUTES => true,
+    DomOptions::OMIT_ROOT_ELEMENT => true,
+]);
+
+$result = DomToArray::toArrayWithOptions($doc, $domOptions);
+```
+
+A plain `new DOMDocument()` with `loadXML()` works just as well; `DomLoader` only adds proper
+error handling.
+
 ### Array elements
 
 Multiple elements with same name will create multidimensional array.
