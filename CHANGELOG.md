@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## Unreleased
+
+### Fixed
+
+- Text content split across multiple nodes (e.g. by a comment or a CDATA section) is now concatenated instead of keeping only the last node.
+
 ## 1.1.0 - 2025-05-23
 
 Skip converting XML comments.

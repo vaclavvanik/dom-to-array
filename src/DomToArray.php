@@ -143,12 +143,12 @@ class DomToArray
             }
 
             if ($childNode instanceof DOMCdataSection) {
-                $result[self::KEY_VALUE] = $childNode->data;
+                $result[self::KEY_VALUE] = ($result[self::KEY_VALUE] ?? '') . $childNode->data;
                 continue;
             }
 
             if ($childNode instanceof DOMText) {
-                $result[self::KEY_VALUE] = $childNode->textContent;
+                $result[self::KEY_VALUE] = ($result[self::KEY_VALUE] ?? '') . $childNode->textContent;
                 continue;
             }
 

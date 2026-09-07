@@ -182,6 +182,26 @@ final class DomToArrayTest extends TestCase
         $this->assertSame($result, DomToArray::toArray($doc));
     }
 
+    public function testConvertTextSplitByComment(): void
+    {
+        $result = ['root' => 'Hello world'];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>Hello <!-- comment -->world</root>');
+
+        $this->assertSame($result, DomToArray::toArray($doc));
+    }
+
+    public function testConvertTextMixedWithCdata(): void
+    {
+        $result = ['root' => 'Hello world'];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>Hello <![CDATA[world]]></root>');
+
+        $this->assertSame($result, DomToArray::toArray($doc));
+    }
+
     private static function domFromFile(string $file): DOMDocument
     {
         $doc = new DOMDocument();
