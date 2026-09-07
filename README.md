@@ -1,5 +1,10 @@
 # DomToArray
 
+[![CI](https://github.com/vaclavvanik/dom-to-array/actions/workflows/ci.yml/badge.svg)](https://github.com/vaclavvanik/dom-to-array/actions/workflows/ci.yml)
+[![Latest Stable Version](https://img.shields.io/packagist/v/vaclavvanik/dom-to-array)](https://packagist.org/packages/vaclavvanik/dom-to-array)
+[![Total Downloads](https://img.shields.io/packagist/dt/vaclavvanik/dom-to-array)](https://packagist.org/packages/vaclavvanik/dom-to-array)
+[![License](https://img.shields.io/packagist/l/vaclavvanik/dom-to-array)](LICENSE.md)
+
 This package provides an easy way to convert [DOMDocument](https://www.php.net/manual/en/class.domdocument.php) to PHP array.
 
 `DomToArray` supports attributes, cdata and array like elements.
