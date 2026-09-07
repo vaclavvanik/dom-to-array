@@ -63,7 +63,7 @@ class DomToArray
             return [];
         }
 
-        $result[$element->nodeName] = $this->convertDomElement($element);
+        $result = [$element->nodeName => $this->convertDomElement($element)];
 
         return $this->mergeAttributes($result, $this->convertDomAttributes($element));
     }
