@@ -54,6 +54,15 @@ class DomToArray
         return false;
     }
 
+    private function keepMixedContent(): bool
+    {
+        if ($this->options) {
+            return $this->options->getKeepMixedContent();
+        }
+
+        return false;
+    }
+
     /** @return array<mixed> */
     private function convert(): array
     {
@@ -182,7 +191,11 @@ class DomToArray
         }
 
         if (isset($result[self::KEY_VALUE]) && trim($result[self::KEY_VALUE]) !== '') {
-            return $result[self::KEY_VALUE];
+            if (count($result) === 1 || $this->keepMixedContent() === false) {
+                return $result[self::KEY_VALUE];
+            }
+
+            return $result;
         }
 
         unset($result[self::KEY_VALUE]);

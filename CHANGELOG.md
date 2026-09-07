@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## Unreleased
 
+### Added
+
+- `DomOptions::KEEP_MIXED_CONTENT` option to keep the text of an element that also has child elements (under the `@value` key) instead of dropping the child elements.
+
 ### Fixed
 
 - Text content split across multiple nodes (e.g. by a comment or a CDATA section) is now concatenated instead of keeping only the last node.

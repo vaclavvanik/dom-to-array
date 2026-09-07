@@ -31,4 +31,18 @@ final class DomOptionsTest extends TestCase
 
         $this->assertTrue($options->getSkipAttributes());
     }
+
+    public function testKeepMixedContentDefaultsToFalse(): void
+    {
+        $options = DomOptions::fromArray([]);
+
+        $this->assertFalse($options->getKeepMixedContent());
+    }
+
+    public function testFromArrayKeepMixedContent(): void
+    {
+        $options = DomOptions::fromArray([DomOptions::KEEP_MIXED_CONTENT => true]);
+
+        $this->assertTrue($options->getKeepMixedContent());
+    }
 }

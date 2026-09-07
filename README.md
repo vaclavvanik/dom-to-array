@@ -186,7 +186,7 @@ $result = [
 
 ## DomOptions
 
-Sometimes it is useful to work only with elements (attributes are not needed).
+Options are passed to `DomToArray::toArrayWithOptions()`.
 
 ```php
 <?php
@@ -199,6 +199,10 @@ use VaclavVanik\DomToArray;
 $domOptions = DomOptions::fromArray([DomOptions::SKIP_ATTRIBUTES => true]);
 $result = DomToArray::toArrayWithOptions($doc, $domOptions);
 ```
+
+### DomOptions::SKIP_ATTRIBUTES
+
+Sometimes it is useful to work only with elements (attributes are not needed).
 
 ```xml
 <root attr="val">
@@ -244,6 +248,41 @@ $result = [
     ],
 ];
 ```
+
+### DomOptions::KEEP_MIXED_CONTENT
+
+By default an element that holds both text and child elements is converted to its
+text only and the child elements are dropped.
+
+```xml
+<root>Gandalf the <colour>Grey</colour></root>
+```
+
+```php
+$result = [
+    'root' => 'Gandalf the ',
+];
+```
+
+With `DomOptions::KEEP_MIXED_CONTENT` the text is kept under the `@value` key next
+to the child elements.
+
+```php
+$domOptions = DomOptions::fromArray([DomOptions::KEEP_MIXED_CONTENT => true]);
+$result = DomToArray::toArrayWithOptions($doc, $domOptions);
+```
+
+```php
+$result = [
+    'root' => [
+        '@value' => 'Gandalf the ',
+        'colour' => 'Grey',
+    ],
+];
+```
+
+Text is concatenated as-is (whitespace included) and its position relative to the
+child elements is not preserved.
 
 ## Run check - coding standards and php-unit
 

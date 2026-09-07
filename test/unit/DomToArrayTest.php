@@ -212,6 +212,45 @@ final class DomToArrayTest extends TestCase
         $this->assertSame($result, DomToArray::toArray($doc));
     }
 
+    public function testConvertMixedContentDropsTextByDefault(): void
+    {
+        $result = ['root' => 'text '];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>text <child>value</child></root>');
+
+        $this->assertSame($result, DomToArray::toArray($doc));
+    }
+
+    public function testConvertKeepMixedContent(): void
+    {
+        $result = [
+            'root' => [
+                '@value' => 'text ',
+                'child' => 'value',
+            ],
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>text <child>value</child></root>');
+
+        $options = DomOptions::fromArray([DomOptions::KEEP_MIXED_CONTENT => true]);
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, $options));
+    }
+
+    public function testConvertKeepMixedContentDoesNotWrapPlainText(): void
+    {
+        $result = ['root' => 'just text'];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>just text</root>');
+
+        $options = DomOptions::fromArray([DomOptions::KEEP_MIXED_CONTENT => true]);
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, $options));
+    }
+
     private static function domFromFile(string $file): DOMDocument
     {
         $doc = new DOMDocument();
