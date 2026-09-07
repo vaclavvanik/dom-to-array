@@ -190,6 +190,16 @@ final class DomToArrayTest extends TestCase
         $this->assertSame($result, DomToArray::toArray($doc));
     }
 
+    public function testConvertTextSplitByProcessingInstruction(): void
+    {
+        $result = ['root' => 'Hello world'];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>Hello <?target data?>world</root>');
+
+        $this->assertSame($result, DomToArray::toArray($doc));
+    }
+
     public function testConvertTextMixedWithCdata(): void
     {
         $result = ['root' => 'Hello world'];
@@ -416,6 +426,42 @@ final class DomToArrayTest extends TestCase
         $doc->loadXML('<root attr="val"/>');
 
         $options = DomOptions::fromArray([DomOptions::USE_ATTRIBUTE_NODE_NAME => true]);
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, $options));
+    }
+
+    public function testConvertUseAttributeNodeNameOnChildElement(): void
+    {
+        $result = [
+            'root' => [
+                'child' => '',
+                'child@x:type' => 'qualified',
+                'child@type' => 'plain',
+            ],
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root xmlns:x="urn:x"><child x:type="qualified" type="plain"/></root>');
+
+        $options = DomOptions::fromArray([DomOptions::USE_ATTRIBUTE_NODE_NAME => true]);
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, $options));
+    }
+
+    public function testConvertOmitRootElementWithKeepMixedContent(): void
+    {
+        $result = [
+            '@value' => 'text ',
+            'child' => 'value',
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>text <child>value</child></root>');
+
+        $options = DomOptions::fromArray([
+            DomOptions::OMIT_ROOT_ELEMENT => true,
+            DomOptions::KEEP_MIXED_CONTENT => true,
+        ]);
 
         $this->assertSame($result, DomToArray::toArrayWithOptions($doc, $options));
     }
