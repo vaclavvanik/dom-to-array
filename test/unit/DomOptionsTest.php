@@ -45,4 +45,18 @@ final class DomOptionsTest extends TestCase
 
         $this->assertTrue($options->getKeepMixedContent());
     }
+
+    public function testOmitRootElementDefaultsToFalse(): void
+    {
+        $options = DomOptions::fromArray([]);
+
+        $this->assertFalse($options->getOmitRootElement());
+    }
+
+    public function testFromArrayOmitRootElement(): void
+    {
+        $options = DomOptions::fromArray([DomOptions::OMIT_ROOT_ELEMENT => true]);
+
+        $this->assertTrue($options->getOmitRootElement());
+    }
 }

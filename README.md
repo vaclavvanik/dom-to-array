@@ -284,6 +284,47 @@ $result = [
 Text is concatenated as-is (whitespace included) and its position relative to the
 child elements is not preserved.
 
+### DomOptions::OMIT_ROOT_ELEMENT
+
+By default the result is wrapped in the name of the root element.
+
+```xml
+<root lang="Elvish">
+    <name>Gandalf</name>
+    <weapon>Staff</weapon>
+</root>
+```
+
+```php
+$result = [
+    'root' => [
+        'name' => 'Gandalf',
+        'weapon' => 'Staff',
+    ],
+    'root@lang' => 'Elvish',
+];
+```
+
+With `DomOptions::OMIT_ROOT_ELEMENT` the wrapper is removed and the children are
+returned directly.
+
+```php
+$domOptions = DomOptions::fromArray([DomOptions::OMIT_ROOT_ELEMENT => true]);
+$result = DomToArray::toArrayWithOptions($doc, $domOptions);
+```
+
+```php
+$result = [
+    'name' => 'Gandalf',
+    'weapon' => 'Staff',
+    'root@lang' => 'Elvish',
+];
+```
+
+Root element attributes keep their `root@attribute` keys (and are still removed by
+`DomOptions::SKIP_ATTRIBUTES`). A root element with only text content is returned
+as `['@value' => '...']`, an empty root element as `[]`.
+
 ## Run check - coding standards and php-unit
 
 Install dependencies:

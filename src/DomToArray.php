@@ -63,6 +63,15 @@ class DomToArray
         return false;
     }
 
+    private function omitRootElement(): bool
+    {
+        if ($this->options) {
+            return $this->options->getOmitRootElement();
+        }
+
+        return false;
+    }
+
     /** @return array<mixed> */
     private function convert(): array
     {
@@ -72,7 +81,22 @@ class DomToArray
             return [];
         }
 
-        $result = [$element->nodeName => $this->convertDomElement($element)];
+        $value = $this->convertDomElement($element);
+
+        if ($this->omitRootElement() === false) {
+            return $this->mergeAttributes(
+                [$element->nodeName => $value],
+                $this->convertDomAttributes($element),
+            );
+        }
+
+        if (is_array($value)) {
+            $result = $value;
+        } elseif ($value === '') {
+            $result = [];
+        } else {
+            $result = [self::KEY_VALUE => $value];
+        }
 
         return $this->mergeAttributes($result, $this->convertDomAttributes($element));
     }

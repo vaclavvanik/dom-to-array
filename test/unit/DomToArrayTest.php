@@ -305,6 +305,77 @@ final class DomToArrayTest extends TestCase
         $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionKeepMixedContent()));
     }
 
+    public function testConvertOmitRootElement(): void
+    {
+        $result = [
+            'name' => 'Gandalf',
+            'weapon' => 'Staff',
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root><name>Gandalf</name><weapon>Staff</weapon></root>');
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionOmitRootElement()));
+    }
+
+    public function testConvertOmitRootElementKeepsRootAttributes(): void
+    {
+        $result = [
+            'name' => 'Gandalf',
+            'root@lang' => 'Elvish',
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root lang="Elvish"><name>Gandalf</name></root>');
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionOmitRootElement()));
+    }
+
+    public function testConvertOmitRootElementSkipAttributes(): void
+    {
+        $result = ['name' => 'Gandalf'];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root lang="Elvish"><name>Gandalf</name></root>');
+
+        $options = DomOptions::fromArray([
+            DomOptions::OMIT_ROOT_ELEMENT => true,
+            DomOptions::SKIP_ATTRIBUTES => true,
+        ]);
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, $options));
+    }
+
+    public function testConvertOmitRootElementWithArrayElements(): void
+    {
+        $result = [
+            'name' => ['Gandalf', 'Saruman'],
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root><name>Gandalf</name><name>Saruman</name></root>');
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionOmitRootElement()));
+    }
+
+    public function testConvertOmitRootElementScalarContent(): void
+    {
+        $result = ['@value' => 'Gandalf'];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>Gandalf</root>');
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionOmitRootElement()));
+    }
+
+    public function testConvertOmitRootElementEmptyRoot(): void
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML('<root/>');
+
+        $this->assertSame([], DomToArray::toArrayWithOptions($doc, self::domOptionOmitRootElement()));
+    }
+
     private static function domFromFile(string $file): DOMDocument
     {
         $doc = new DOMDocument();
@@ -321,5 +392,10 @@ final class DomToArrayTest extends TestCase
     private static function domOptionKeepMixedContent(): DomOptions
     {
         return DomOptions::fromArray([DomOptions::KEEP_MIXED_CONTENT => true]);
+    }
+
+    private static function domOptionOmitRootElement(): DomOptions
+    {
+        return DomOptions::fromArray([DomOptions::OMIT_ROOT_ELEMENT => true]);
     }
 }
