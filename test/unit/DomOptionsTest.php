@@ -17,4 +17,18 @@ final class DomOptionsTest extends TestCase
 
         $this->assertSame($array[DomOptions::SKIP_ATTRIBUTES], $options->getSkipAttributes());
     }
+
+    public function testFromArrayDefaultsToFalse(): void
+    {
+        $options = DomOptions::fromArray([]);
+
+        $this->assertFalse($options->getSkipAttributes());
+    }
+
+    public function testFromArrayCastsToBool(): void
+    {
+        $options = DomOptions::fromArray([DomOptions::SKIP_ATTRIBUTES => 1]);
+
+        $this->assertTrue($options->getSkipAttributes());
+    }
 }

@@ -19,7 +19,7 @@ class DomOptions
     /** @param array{skip_attributes?: bool} $array */
     public static function fromArray(array $array): self
     {
-        $skipAttributes = $array[self::SKIP_ATTRIBUTES] ?? false;
+        $skipAttributes = (bool) ($array[self::SKIP_ATTRIBUTES] ?? false);
 
         return new self($skipAttributes);
     }
