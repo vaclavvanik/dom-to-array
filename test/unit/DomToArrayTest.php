@@ -172,9 +172,7 @@ final class DomToArrayTest extends TestCase
 
     public function testSkipComment(): void
     {
-        $result = [
-            'root' => '',
-        ];
+        $result = ['root' => ''];
 
         $doc = new DOMDocument();
         $doc->loadXML('<root><!-- test --></root>');
@@ -205,9 +203,7 @@ final class DomToArrayTest extends TestCase
     public function testSkipProcessingInstruction(): void
     {
         $result = [
-            'root' => [
-                'a' => 'x',
-            ],
+            'root' => ['a' => 'x'],
         ];
 
         $doc = new DOMDocument();
