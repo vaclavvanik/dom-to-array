@@ -26,7 +26,7 @@ Simply pass DOMDocument
 declare(strict_types=1);
 
 use DOMDocument;
-use VaclavVanik\DomToArray;
+use VaclavVanik\DomToArray\DomToArray;
 
 $doc = new DOMDocument();
 $doc->loadXML('<root/>');
@@ -136,6 +136,7 @@ $result = [
                 'weapon' => 'Ring',
                 'guy@lang' => 'Black Speech',
             ],
+            [
                 'name' => 'Gandalf',
                 'name@weapon' => 'Staff',
                 'weapon' => 'Staff',
@@ -145,7 +146,7 @@ $result = [
         'bad_guy' => [
             [
                 'name' => 'Saruman',
-                 'name@weapon' => 'Staff',
+                'name@weapon' => 'Staff',
             ],
             [
                 'name' => 'Sauron',
@@ -184,6 +185,20 @@ $result = [
 ];
 ```
 
+### Comments and processing instructions
+
+Comments and processing instructions are skipped. Text they split is joined.
+
+```xml
+<root>Gandalf <!-- comment --><?target data?>the Grey</root>
+```
+
+```php
+$result = [
+    'root' => 'Gandalf the Grey',
+];
+```
+
 ## DomOptions
 
 Options are passed to `DomToArray::toArrayWithOptions()`.
@@ -194,7 +209,8 @@ Options are passed to `DomToArray::toArrayWithOptions()`.
 declare(strict_types=1);
 
 use DOMDocument;
-use VaclavVanik\DomToArray;
+use VaclavVanik\DomToArray\DomOptions;
+use VaclavVanik\DomToArray\DomToArray;
 
 $domOptions = DomOptions::fromArray([DomOptions::SKIP_ATTRIBUTES => true]);
 $result = DomToArray::toArrayWithOptions($doc, $domOptions);
