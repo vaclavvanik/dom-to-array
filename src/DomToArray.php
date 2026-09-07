@@ -111,7 +111,7 @@ class DomToArray
     /** @param array<string,int> $childNamesCount */
     private function isArrayElement(string $name, array $childNamesCount): bool
     {
-        return $childNamesCount[$name] > 1;
+        return ($childNamesCount[$name] ?? 0) > 1;
     }
 
     /**
