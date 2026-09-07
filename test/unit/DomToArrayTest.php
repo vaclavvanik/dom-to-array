@@ -234,9 +234,7 @@ final class DomToArrayTest extends TestCase
         $doc = new DOMDocument();
         $doc->loadXML('<root>text <child>value</child></root>');
 
-        $options = DomOptions::fromArray([DomOptions::KEEP_MIXED_CONTENT => true]);
-
-        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, $options));
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionKeepMixedContent()));
     }
 
     public function testConvertKeepMixedContentDoesNotWrapPlainText(): void
@@ -246,9 +244,65 @@ final class DomToArrayTest extends TestCase
         $doc = new DOMDocument();
         $doc->loadXML('<root>just text</root>');
 
-        $options = DomOptions::fromArray([DomOptions::KEEP_MIXED_CONTENT => true]);
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionKeepMixedContent()));
+    }
 
-        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, $options));
+    public function testConvertKeepMixedContentMergesAttributes(): void
+    {
+        $result = [
+            'root' => [
+                '@value' => 'text ',
+                'child' => 'value',
+            ],
+            'root@attr' => 'a',
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root attr="a">text <child>value</child></root>');
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionKeepMixedContent()));
+    }
+
+    public function testConvertKeepMixedContentWithArrayElements(): void
+    {
+        $result = [
+            'root' => [
+                '@value' => 'text ',
+                'child' => ['one', 'two'],
+            ],
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>text <child>one</child><child>two</child></root>');
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionKeepMixedContent()));
+    }
+
+    public function testConvertKeepMixedContentWithEmptyChild(): void
+    {
+        $result = [
+            'root' => [
+                '@value' => 'ab',
+                'child' => '',
+            ],
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>a<child/>b</root>');
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionKeepMixedContent()));
+    }
+
+    public function testConvertKeepMixedContentIgnoresWhitespaceOnlyText(): void
+    {
+        $result = [
+            'root' => ['child' => 'x'],
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root>   <child>x</child>   </root>');
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, self::domOptionKeepMixedContent()));
     }
 
     private static function domFromFile(string $file): DOMDocument
@@ -262,5 +316,10 @@ final class DomToArrayTest extends TestCase
     private static function domOptionSkipAttributes(): DomOptions
     {
         return DomOptions::fromArray([DomOptions::SKIP_ATTRIBUTES => true]);
+    }
+
+    private static function domOptionKeepMixedContent(): DomOptions
+    {
+        return DomOptions::fromArray([DomOptions::KEEP_MIXED_CONTENT => true]);
     }
 }
