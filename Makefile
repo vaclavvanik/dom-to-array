@@ -19,6 +19,6 @@ unit-test:
 	./tools/php-unit/vendor/bin/phpunit -c tools/php-unit/phpunit.xml.dist
 
 code-coverage-html:
-	XDEBUG_MODE=coverage ./tools/php-unit/vendor/bin/phpunit -c tools/php-unit/phpunit.xml.dist --coverage-html tools/php-unit/reports/codecoverage
+	XDEBUG_MODE=coverage ./tools/php-unit/vendor/bin/phpunit -c tools/php-unit/phpunit.xml.dist --coverage-filter src --coverage-html tools/php-unit/reports/codecoverage
 
 check: coding-standard-check unit-test
