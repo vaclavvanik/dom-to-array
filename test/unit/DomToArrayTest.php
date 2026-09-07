@@ -202,6 +202,20 @@ final class DomToArrayTest extends TestCase
         $this->assertSame($result, DomToArray::toArray($doc));
     }
 
+    public function testSkipProcessingInstruction(): void
+    {
+        $result = [
+            'root' => [
+                'a' => 'x',
+            ],
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root><?target data?><a>x</a></root>');
+
+        $this->assertSame($result, DomToArray::toArray($doc));
+    }
+
     private static function domFromFile(string $file): DOMDocument
     {
         $doc = new DOMDocument();
