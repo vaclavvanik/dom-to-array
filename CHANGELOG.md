@@ -2,13 +2,23 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## Unreleased
+## 1.2.0 - 2026-09-07
 
 ### Added
 
 - `DomOptions::KEEP_MIXED_CONTENT` option to keep the text of an element that also has child elements (under the `@value` key) instead of dropping the child elements.
 - `DomOptions::OMIT_ROOT_ELEMENT` option to return the root element children directly instead of wrapping them in the root element name.
 - `DomOptions::USE_ATTRIBUTE_NODE_NAME` option to key attributes by their full node name (with namespace prefix) instead of the local name.
+- Tested against PHP 7.3 up to PHP 8.5 on a CI matrix.
+- Test suite runs on PHPUnit 9.6, 10.5 and 11.5, selected automatically per PHP version.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
 
 ### Fixed
 
