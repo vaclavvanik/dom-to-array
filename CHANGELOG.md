@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - `DomOptions::KEEP_MIXED_CONTENT` option to keep the text of an element that also has child elements (under the `@value` key) instead of dropping the child elements.
 - `DomOptions::OMIT_ROOT_ELEMENT` option to return the root element children directly instead of wrapping them in the root element name.
+- `DomOptions::USE_ATTRIBUTE_NODE_NAME` option to key attributes by their full node name (with namespace prefix) instead of the local name.
 
 ### Fixed
 

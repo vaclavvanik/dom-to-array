@@ -59,4 +59,18 @@ final class DomOptionsTest extends TestCase
 
         $this->assertTrue($options->getOmitRootElement());
     }
+
+    public function testUseAttributeNodeNameDefaultsToFalse(): void
+    {
+        $options = DomOptions::fromArray([]);
+
+        $this->assertFalse($options->getUseAttributeNodeName());
+    }
+
+    public function testFromArrayUseAttributeNodeName(): void
+    {
+        $options = DomOptions::fromArray([DomOptions::USE_ATTRIBUTE_NODE_NAME => true]);
+
+        $this->assertTrue($options->getUseAttributeNodeName());
+    }
 }

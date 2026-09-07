@@ -72,6 +72,15 @@ class DomToArray
         return false;
     }
 
+    private function useAttributeNodeName(): bool
+    {
+        if ($this->options) {
+            return $this->options->getUseAttributeNodeName();
+        }
+
+        return false;
+    }
+
     /** @return array<mixed> */
     private function convert(): array
     {
@@ -111,8 +120,12 @@ class DomToArray
         if ($element->hasAttributes()) {
             $attributes = [];
 
+            $useNodeName = $this->useAttributeNodeName();
+
             foreach ($element->attributes as $attr) {
-                $attributes[$element->nodeName . self::ATTRIBUTE_PREFIX . $attr->name] = $attr->value;
+                $name = $useNodeName ? $attr->nodeName : $attr->name;
+
+                $attributes[$element->nodeName . self::ATTRIBUTE_PREFIX . $name] = $attr->value;
             }
 
             return $attributes;

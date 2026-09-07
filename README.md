@@ -325,6 +325,38 @@ Root element attributes keep their `root@attribute` keys (and are still removed 
 `DomOptions::SKIP_ATTRIBUTES`). A root element with only text content is returned
 as `['@value' => '...']`, an empty root element as `[]`.
 
+### DomOptions::USE_ATTRIBUTE_NODE_NAME
+
+By default attributes are keyed by their local name, so two attributes that only
+differ by namespace prefix collide.
+
+```xml
+<root xmlns:x="urn:x" x:type="qualified" type="plain"/>
+```
+
+```php
+$result = [
+    'root' => '',
+    'root@type' => 'plain',
+];
+```
+
+With `DomOptions::USE_ATTRIBUTE_NODE_NAME` the full attribute node name (including
+the namespace prefix) is used.
+
+```php
+$domOptions = DomOptions::fromArray([DomOptions::USE_ATTRIBUTE_NODE_NAME => true]);
+$result = DomToArray::toArrayWithOptions($doc, $domOptions);
+```
+
+```php
+$result = [
+    'root' => '',
+    'root@x:type' => 'qualified',
+    'root@type' => 'plain',
+];
+```
+
 ## Run check - coding standards and php-unit
 
 Install dependencies:

@@ -376,6 +376,50 @@ final class DomToArrayTest extends TestCase
         $this->assertSame([], DomToArray::toArrayWithOptions($doc, self::domOptionOmitRootElement()));
     }
 
+    public function testConvertMergesNamespacedAttributesByLocalNameByDefault(): void
+    {
+        $result = [
+            'root' => '',
+            'root@type' => 'plain',
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root xmlns:x="urn:x" x:type="qualified" type="plain"/>');
+
+        $this->assertSame($result, DomToArray::toArray($doc));
+    }
+
+    public function testConvertUseAttributeNodeNameKeepsNamespacePrefix(): void
+    {
+        $result = [
+            'root' => '',
+            'root@x:type' => 'qualified',
+            'root@type' => 'plain',
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root xmlns:x="urn:x" x:type="qualified" type="plain"/>');
+
+        $options = DomOptions::fromArray([DomOptions::USE_ATTRIBUTE_NODE_NAME => true]);
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, $options));
+    }
+
+    public function testConvertUseAttributeNodeNameLeavesPlainAttributesUnchanged(): void
+    {
+        $result = [
+            'root' => '',
+            'root@attr' => 'val',
+        ];
+
+        $doc = new DOMDocument();
+        $doc->loadXML('<root attr="val"/>');
+
+        $options = DomOptions::fromArray([DomOptions::USE_ATTRIBUTE_NODE_NAME => true]);
+
+        $this->assertSame($result, DomToArray::toArrayWithOptions($doc, $options));
+    }
+
     private static function domFromFile(string $file): DOMDocument
     {
         $doc = new DOMDocument();
